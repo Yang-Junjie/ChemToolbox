@@ -21,7 +21,7 @@ _token_spec = [
 _token_regex = re.compile("|".join("(?P<%s>%s)" % pair for pair in _token_spec))
 
 
-def lex(text):
+def lex(text:str)->list[tuple[str, str]]:
     pos, tokens = 0, []
     # 如果pos未到达文本末尾，则继续解析
     while pos < len(text):
@@ -39,7 +39,7 @@ def lex(text):
     return tokens
 
 
-def parse_charge(s):
+def parse_charge(s:str) -> int:
     """解析电荷字符串，返回整数电荷"""
     s = s.strip()
     if s == "+":
@@ -158,7 +158,7 @@ class Parser:
         return dict(total), total_charge
 
 
-def parse_formula(text):
+def parse_formula(text: str)-> tuple[dict, int]:
     """解析化学式，返回元素组成和总电荷"""
     tokens = lex(text)
     p = Parser(tokens)
@@ -166,7 +166,7 @@ def parse_formula(text):
     return comp, charge
 
 
-def parse_formula_json(text):
+def parse_formula_json(text: str) -> str:
     """解析化学式，返回JSON格式"""
     comp, charge = parse_formula(text)
     data = {"composition": comp, "charge": charge}  
