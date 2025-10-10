@@ -166,8 +166,4 @@ def parse_formula(text: str) -> tuple[dict, int]:
     return comp, charge
 
 
-def parse_formula_json(text: str) -> str:
-    """解析化学式，返回JSON格式"""
-    comp, charge = parse_formula(text)
-    data = {"composition": comp, "charge": charge}
-    return json.dumps(data, ensure_ascii=False)
+
