@@ -21,7 +21,7 @@ _token_spec = [
 _token_regex = re.compile("|".join("(?P<%s>%s)" % pair for pair in _token_spec))
 
 
-def lex(text:str)->list[tuple[str, str]]:
+def lex(text: str) -> list[tuple[str, str]]:
     pos, tokens = 0, []
     # 如果pos未到达文本末尾，则继续解析
     while pos < len(text):
@@ -39,7 +39,7 @@ def lex(text:str)->list[tuple[str, str]]:
     return tokens
 
 
-def parse_charge(s:str) -> int:
+def parse_charge(s: str) -> int:
     """解析电荷字符串，返回整数电荷"""
     s = s.strip()
     if s == "+":
@@ -55,15 +55,15 @@ def parse_charge(s:str) -> int:
 
 
 class Parser:
-    def __init__(self, tokens):
+    def __init__(self, tokens: list[Token]):
         self.tokens = tokens
         self.i = 0
 
-    def cur(self):
+    def cur(self) -> Token:
         """获取当前token"""
         return self.tokens[self.i]
 
-    def eat(self, *types):
+    def eat(self, *types) -> Token:
         """如果当前token类型在types中，则消耗掉并返回，否则报错"""
         if self.cur().type in types:
             t = self.cur()
@@ -71,13 +71,13 @@ class Parser:
             return t
         raise SyntaxError(f"期望 {types}，得到 {self.cur()}")
 
-    def parse(self):
+    def parse(self) -> tuple[dict, int]:
         comp, charge = self.parse_formula()
         if self.cur().type != "EOF":
             raise SyntaxError(f"解析未结束：{self.cur()}")
         return comp, charge
 
-    def parse_unit(self):
+    def parse_unit(self) -> tuple[dict, int]:
         """解析一个元素组成"""
         charge = 0
         # 元素
@@ -118,7 +118,7 @@ class Parser:
 
         raise SyntaxError(f"意外的符号: {self.cur()}")
 
-    def parse_number(self):
+    def parse_number(self) -> int:
         """解析下标数字"""
         self.eat("UNDERS")
         if self.cur().type == "LBRACE":
@@ -129,7 +129,7 @@ class Parser:
             n = int(self.eat("NUMBER").value)
         return n
 
-    def read_braced_content(self):
+    def read_braced_content(self) -> str:
         """读取花括号内的内容，当前token是CARET"""
         self.eat("CARET")
         if self.cur().type != "LBRACE":
@@ -142,7 +142,7 @@ class Parser:
         self.eat("RBRACE")
         return content.strip()
 
-    def parse_formula(self):
+    def parse_formula(self) -> tuple[dict, int]:
         """解析化学式，返回元素组成和总电荷"""
         total = defaultdict(int)
         total_charge = 0
@@ -158,7 +158,7 @@ class Parser:
         return dict(total), total_charge
 
 
-def parse_formula(text: str)-> tuple[dict, int]:
+def parse_formula(text: str) -> tuple[dict, int]:
     """解析化学式，返回元素组成和总电荷"""
     tokens = lex(text)
     p = Parser(tokens)
@@ -169,8 +169,5 @@ def parse_formula(text: str)-> tuple[dict, int]:
 def parse_formula_json(text: str) -> str:
     """解析化学式，返回JSON格式"""
     comp, charge = parse_formula(text)
-    data = {"composition": comp, "charge": charge}  
+    data = {"composition": comp, "charge": charge}
     return json.dumps(data, ensure_ascii=False)
-
-
-
