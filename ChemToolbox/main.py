@@ -1,7 +1,3 @@
-﻿import api.utils as utils
+﻿from utils.find_element import find_element 
 
-result = utils.find_element("Cu")
-if result:
-    print(result)
-else:
-    print("元素不存在")
+print(find_element("Cu"))

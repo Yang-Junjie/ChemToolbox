@@ -173,13 +173,4 @@ def parse_formula_json(text):
     return json.dumps(data, ensure_ascii=False)
 
 
-# 测试
-if __name__ == "__main__":
-    tests = ["H_2O", "SO_{4}^{2-}", "(NH_4)_2SO_4", "Ca^{2+}", "Fe^{3+}", "CH_3CH_2OH"]
-    for t in tests:
-        try:
-            result_json = parse_formula_json(t)
-            print(f"{t} -> {result_json}")
-        except Exception as e:
-            print(f"{t} -> ERROR: {e}")
 
