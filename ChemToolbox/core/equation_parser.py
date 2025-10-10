@@ -3,7 +3,7 @@ from .compound_parser import parse_formula
 from collections import Counter
 
 
-def parse_equation(equation: str):
+def parse_equation(equation: str) -> dict[str, list[str]]:
     """解析化学反应方程式，分离反应物和生成物，并提取元素、电荷信息"""
 
     # 分割反应物和生成物
@@ -38,14 +38,11 @@ def parse_equation(equation: str):
                 i += 1
         return parts
 
-    def parse_side(parts):
+    def parse_side(parts: list[str]) -> dict:
         """解析方程一侧（反应物或生成物），提取元素、数量、电荷"""
-        parsed = [
-            parse_formula(p) for p in parts
-        ]  # 每个 parse_formula 返回 (dict, charge)
-        formulas = [f[0] for f in parsed]  # 提取化学式字典
-        charges = [f[1] for f in parsed]  # 提取电荷
-        # 将所有元素计数合并成一个总字典
+        parsed = [parse_formula(p) for p in parts]
+        formulas = [f[0] for f in parsed]
+        charges = [f[1] for f in parsed]
         total = dict(sum((Counter(f) for f in formulas), Counter()))
         return {
             "parts": parts,
@@ -54,14 +51,11 @@ def parse_equation(equation: str):
             "total": total,
         }
 
-    # 分别解析反应物和生成物
     left = parse_side(split_parts(left_str))
     right = parse_side(split_parts(right_str))
 
-    # 收集所有涉及的元素（用于构建配平方程的系数矩阵）
     elements = sorted(set(left["total"]) | set(right["total"]))
 
-    # 返回结构化结果，方便后续配平方程
     return {"left": left, "right": right, "elements": elements}
 
 
