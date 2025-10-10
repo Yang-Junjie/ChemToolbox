@@ -1,4 +1,6 @@
 ﻿import re
+from .compound_parser import parse_formula
+
 def parse_equation(equation: str) -> tuple[list, list]:
     """解析化学反应方程式，分离反应物和生成物"""
     # 分割反应物和生成物
@@ -52,3 +54,13 @@ def parse_equation(equation: str) -> tuple[list, list]:
             i += 1
 
     return left_part, right_part
+
+def get_all_elements(equation: str) -> set:
+    """获取化学反应方程式中所有涉及的元素"""
+    left_part, right_part = parse_equation(equation)
+    elements = set()
+    for compound in left_part + right_part:
+        formula, _ = parse_formula(compound)
+        elements.update(formula.keys())
+    return elements
+
