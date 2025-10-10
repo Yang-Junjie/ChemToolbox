@@ -120,7 +120,7 @@ cd ChemToolbox
 uvicorn main:app --reload
 ```
 
-服务启动后，可通过 http://localhost:8000 访问API，通过 http://localhost:8000/docs 查看交互式API文档。
+服务启动后，可通过 http://localhost:8000 访问API
 
 #### API端点
 
@@ -183,10 +183,7 @@ ChemToolbox/
 
 - 添加热力学计算功能（焓、熵、自由能）
 - 增强化学式解析器，支持更复杂的化学式表示
-- 添加化学计算器功能
-- 增加光谱分析支持
-- 完善更多化学数据库
-- 添加可视化组件
+
 
 ## 许可证
 
