@@ -1,8 +1,6 @@
 ﻿from fastapi import APIRouter, Response, status, HTTPException
 from ChemToolbox.core.equation_parser import parse_equation, get_all_elements
 from ChemToolbox.core.equaion_balancer import EquationBalancer
-from fastapi.responses import JSONResponse
-import json
 
 router = APIRouter(prefix="/equations", tags=["Chemical Equations"])
 
