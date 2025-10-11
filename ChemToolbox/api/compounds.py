@@ -8,5 +8,8 @@ router = APIRouter(prefix="/compounds", tags=["Chemical Compounds"])
 
 @router.get("/molar_mass/{formula}")
 def get_molar_mass(formula: str):
-    mass = relative_molecular_mass(formula)
-    return {"formula": formula, "molar_mass": mass}
+    try:
+        mass = relative_molecular_mass(formula)
+        return {"formula": formula, "molar_mass": mass}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
