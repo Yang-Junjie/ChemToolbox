@@ -20,8 +20,34 @@ def find_element(symbol: str) -> dict | None:
     return None
 
 
-def get_table_elements():
-    pass
+def periodic_table():
+    """以周期表形式打印元素"""
+    elements = _load_elements()
+
+    # 按周期和族组织
+    table = {}
+    for e in elements:
+        period = e.get("period", 0)
+        group = e.get("group", 0)
+        table.setdefault(period, {})[group] = e
+
+    # 打印表头
+    header = "   ".join([f"{g:>3}" for g in range(1, 19)])
+    print(f"    {header}")
+    print("   " + "-" * len(header))
+
+    # 每一周期一行
+    for period in range(1, 8):
+        row = [f"{period:>2} |"]
+        for group in range(1, 19):
+            el = table.get(period, {}).get(group)
+            if el:
+                row.append(f"{el['symbol']:^3}")
+            else:
+                row.append("   ")
+        print("   ".join(row))
+
+
 
 def get_period(element: str) -> int | None:
     """获取元素的周期数"""
@@ -30,12 +56,14 @@ def get_period(element: str) -> int | None:
         return el.get("period")
     return None
 
+
 def get_group(element: str) -> int | None:
     """获取元素的组数"""
     el = find_element(element)
     if el:
         return el.get("group")
     return None
+
 
 def get_atomic_number(element: str) -> int | None:
     """获取元素的原子序数"""
@@ -44,10 +72,10 @@ def get_atomic_number(element: str) -> int | None:
         return el.get("atomic_number")
     return None
 
+
 def get_atomic_mass(element: str) -> float | None:
     """获取元素的相对原子质量"""
     el = find_element(element)
     if el:
         return el.get("atomic_mass")
     return None
-
